@@ -3,6 +3,7 @@
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
+    public Rigidbody rb;
     public float turnSpeed = 0f;
     private float verticalInput;
     private float horizontalInput;
@@ -21,13 +22,13 @@ public class PlayerController : MonoBehaviour
         bulletPos2 = GameObject.Find("SpawnPos2");
         gun = GameObject.Find("Gun");
         gun2 = GameObject.Find("Gun2");
-
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        rb.velocity = transform.forward * speed;
         Rotate();
         if (Input.GetKey(KeyCode.Space))
         {
@@ -42,10 +43,6 @@ public class PlayerController : MonoBehaviour
             Instantiate(bulletPre, bulletPos2.transform.position, bulletPos2.transform.rotation);
             bulletPos2.transform.rotation = transform.rotation;
         }
-        if(gameObject.CompareTag("Mountain"))
-        {
-            Debug.Log("asdasd");
-        }
     }
 
     void Rotate()
@@ -53,7 +50,7 @@ public class PlayerController : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
         horizontalInput = Input.GetAxis("Horizontal");
 
-        Vector3 currentEulerAngles = transform.eulerAngles;
+        Vector3 currentEulerAngles = rb.rotation.eulerAngles;
 
         if (currentEulerAngles.x > 180) currentEulerAngles.x -= 360;
         if (currentEulerAngles.y > 180) currentEulerAngles.y -= 360;
@@ -62,13 +59,13 @@ public class PlayerController : MonoBehaviour
         float newRotationX = currentEulerAngles.x - Time.deltaTime * turnSpeed * verticalInput;
         newRotationX = Mathf.Clamp(newRotationX, -60f, 60f);
 
-
         float newRotationY = currentEulerAngles.y - Time.deltaTime * turnSpeed * horizontalInput;
         float newRotationZ = currentEulerAngles.z + Time.deltaTime * turnSpeed * horizontalInput;
         newRotationZ = Mathf.Clamp(newRotationZ, -30f, 30f);
 
-        transform.eulerAngles = new Vector3(newRotationX, newRotationY, newRotationZ);
+        Quaternion newRotation = Quaternion.Euler(newRotationX, newRotationY, newRotationZ);
 
+        rb.MoveRotation(newRotation);
     }
 
 }
