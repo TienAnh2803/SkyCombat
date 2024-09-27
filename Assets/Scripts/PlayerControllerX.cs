@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
     public Rigidbody rb;
     public float turnSpeed = 0f;
+    public float turnBackSpeed = 0.5f;
     private float verticalInput;
     private float horizontalInput;
     private GameObject gun;
@@ -29,7 +31,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         rb.velocity = transform.forward * speed;
-        Rotate();
+        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        if (verticalInput != 0 || horizontalInput != 0)
+        {
+            Rotate(verticalInput, horizontalInput);
+        }
+        else
+        {
+            RotateBack();
+        }
+    }
+
+    void FixedUpdate()
+    {
         if (Input.GetKey(KeyCode.Space))
         {
             gun.transform.Rotate(Vector3.up * spin);
@@ -45,11 +60,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Rotate()
+    void Rotate(float verticalInput, float horizontalInput)
     {
-        verticalInput = Input.GetAxis("Vertical");
-        horizontalInput = Input.GetAxis("Horizontal");
-
         Vector3 currentEulerAngles = rb.rotation.eulerAngles;
 
         if (currentEulerAngles.x > 180) currentEulerAngles.x -= 360;
@@ -61,11 +73,25 @@ public class PlayerController : MonoBehaviour
 
         float newRotationY = currentEulerAngles.y - Time.deltaTime * turnSpeed * horizontalInput;
         float newRotationZ = currentEulerAngles.z + Time.deltaTime * turnSpeed * horizontalInput;
-        newRotationZ = Mathf.Clamp(newRotationZ, -30f, 30f);
+        newRotationZ = Mathf.Clamp(newRotationZ, -60f, 60f);
 
         Quaternion newRotation = Quaternion.Euler(newRotationX, newRotationY, newRotationZ);
 
         rb.MoveRotation(newRotation);
+    }
+
+    void RotateBack()
+    {
+        Vector3 currentEulerAngles = rb.rotation.eulerAngles;
+        float rotationZ = currentEulerAngles.z;
+        if (rotationZ > 180) rotationZ -= 360;
+
+        if (rotationZ != 0f)
+        {
+            rotationZ = rotationZ > 0 ? rotationZ -= turnBackSpeed : rotationZ += turnBackSpeed;
+            if (MathF.Abs(rotationZ) <= turnBackSpeed) rotationZ = 0;
+            rb.MoveRotation(Quaternion.Euler(currentEulerAngles.x, currentEulerAngles.y, rotationZ));
+        }
     }
 
 }
