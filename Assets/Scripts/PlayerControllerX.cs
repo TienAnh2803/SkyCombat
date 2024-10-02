@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private GameObject gun;
     private GameObject gun2;
+    public ParticleSystem boom;
     public ObjectPool bulletPool;
     private GameObject bulletPos;
     private GameObject bulletPos2;
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         {
             RotateBack();
         }
+        boom.Stop();
     }
 
     void FixedUpdate()
@@ -104,5 +106,9 @@ public class PlayerController : MonoBehaviour
             rb.MoveRotation(Quaternion.Euler(currentEulerAngles.x, currentEulerAngles.y, rotationZ));
         }
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {   
+          Destroy(gameObject);
+          boom.Play();
+    }
 }
