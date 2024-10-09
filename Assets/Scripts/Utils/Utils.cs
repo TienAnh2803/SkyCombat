@@ -6,6 +6,6 @@ public static class Utils
 {
     public static Vector3 GetRandomSpawnPoint()
     {
-        return new Vector3(0, 0, 0);
+        return new Vector3(100, 100, 0);
     }
 }

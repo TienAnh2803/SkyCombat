@@ -5,17 +5,23 @@ using Fusion;
 
 public class Bullet : NetworkBehaviour
 {
-    public float speed = 500f;
+    private BulletPool bulletPool;
+    public float speed = 10f;
     public Rigidbody rb;
-    public ObjectPool pool;
-    void Awake()
-    {
-        if (pool == null)
-        {
-            pool = GameObject.Find("bulletPool").GetComponent<ObjectPool>();
-        }
 
+    public override void Spawned()
+    {
+        if (bulletPool == null)
+        {
+            bulletPool = GameObject.Find("bulletPool").GetComponent<BulletPool>();
+        }
     }
+
+    void OnEnable()
+    {
+        Invoke("Deactivate", 2f);
+    }
+
 
     public override void FixedUpdateNetwork()
     {
@@ -24,24 +30,31 @@ public class Bullet : NetworkBehaviour
             rb.velocity = transform.forward * speed;
         }
     }
-    public override void Spawned()
+
+    void Deactivate()
     {
-        Invoke(nameof(DespawnBullet), 2f);
+        ReturnToPool();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        DespawnBullet();
+        ReturnToPool();
     }
 
-    void DespawnBullet()
+    private void ReturnToPool()
     {
-        if (Object != null && Object.HasStateAuthority)
+        if (bulletPool != null)
         {
-            Debug.Log(gameObject);
-            Debug.Log(pool);
-            pool.ReturnBullet(gameObject);
+            bulletPool.ReturnBulletToPool(Object);
+        }
+        else if (Object.HasStateAuthority)
+        {
             Runner.Despawn(Object);
         }
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke();
     }
 }

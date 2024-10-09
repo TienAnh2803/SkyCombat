@@ -11,7 +11,7 @@ public class NetworkPlayerController : NetworkTransform
   public float turnSpeed = 0f;
   public float turnBackSpeed = 0.5f;
   // public ParticleSystem boom;
-  public ObjectPool bulletPool;
+  public BulletPool bulletPool;
   public float spin = 1000f;
   public float fireRate = 0.1f;
 
@@ -31,12 +31,17 @@ public class NetworkPlayerController : NetworkTransform
   {
     base.Awake();
     Rb = GetComponent<Rigidbody>();
-    bulletPool = GameObject.Find("bulletPool").GetComponent<ObjectPool>();
+    bulletPool = GameObject.Find("bulletPool").GetComponent<BulletPool>();
   }
 
   public override void Spawned()
   {
     base.Spawned();
+
+    if (Object.HasInputAuthority)
+      transform.GetComponentInChildren<Camera>().gameObject.SetActive(true);
+    else
+      transform.GetComponentInChildren<Camera>().gameObject.SetActive(false);
   }
 
   public void Rotate(float verticalInput, float horizontalInput)
@@ -84,10 +89,8 @@ public class NetworkPlayerController : NetworkTransform
     {
       nextFireTime = Time.time + fireRate;
 
-      GameObject bullet = bulletPool.GetBullet();
-      GameObject bullet2 = bulletPool.GetBullet();
-      // Runner.Spawn(bullet.GetComponent<NetworkObject>(), transform.position, transform.rotation, Object.InputAuthority);
-      Runner.Spawn(bullet.GetComponent<NetworkObject>(), transform.position, transform.rotation, Object.InputAuthority);
+      bulletPool.GetBulletFromPool(Runner, transform.position, transform.rotation);
+      bulletPool.GetBulletFromPool(Runner, transform.position, transform.rotation);
     }
   }
 
