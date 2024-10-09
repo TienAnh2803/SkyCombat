@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5217511858525374446}
   - component: {fileID: 3840763513495406369}
   - component: {fileID: -2263530345930123832}
+  - component: {fileID: 1527376553550718165}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -119,7 +120,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34d45ae6585dac4db1bab598b00013d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 500
+  WordOffset: 0
+  WordCount: 0
+  _interpolationDataSource: 0
+  speed: 500
+  rb: {fileID: -2263530345930123832}
   pool: {fileID: 0}
 --- !u!54 &-2263530345930123832
 Rigidbody:
@@ -148,3 +153,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &1527376553550718165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7333499037450986946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 2305
+  NetworkGuid:
+    RawGuidValue: 7a9b6d1806000b84c91020e89cc8e8da
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 3840763513495406369}
+  SimulationBehaviours: []
