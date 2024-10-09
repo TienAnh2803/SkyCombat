@@ -1,30 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    public float bulletSpeed;
+    public float speed = 500f;
+    public Rigidbody rb;
     public ObjectPool pool;
-    void OnEnable()
+    void Awake()
     {
-        Invoke("Deactivate", 2f);
+        if (pool == null)
+        {
+            pool = GameObject.Find("bulletPool").GetComponent<ObjectPool>();
+        }
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        transform.Translate(Vector3.forward * bulletSpeed * Time.deltaTime);
+        if (Object.HasStateAuthority)
+        {
+            rb.velocity = transform.forward * speed;
+        }
+    }
+    public override void Spawned()
+    {
+        Invoke(nameof(DespawnBullet), 2f);
     }
 
-    void Deactivate()
+    private void OnCollisionEnter(Collision collision)
     {
-        pool.ReturnBullet(gameObject);
+        DespawnBullet();
     }
 
-    void OnDisable()
+    void DespawnBullet()
     {
-        CancelInvoke(); // Hủy mọi lời gọi Invoke khi đạn bị tắt
+        if (Object != null && Object.HasStateAuthority)
+        {
+            Debug.Log(gameObject);
+            Debug.Log(pool);
+            pool.ReturnBullet(gameObject);
+            Runner.Despawn(Object);
+        }
     }
 }
