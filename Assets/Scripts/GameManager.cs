@@ -40,6 +40,7 @@ public class GameManager : NetworkBehaviour
 
             NetworkObject bot = Runner.Spawn(botPrefab, spawnPoint.position, spawnPoint.rotation, Object.InputAuthority);
             GameObject botGameObject = bot.gameObject;
+            botGameObject.transform.SetParent(transform);
 
             spawnedBots.Add(botGameObject);
         }
@@ -58,7 +59,6 @@ public class GameManager : NetworkBehaviour
     public GameObject GetRandomInGameObject()
     {
         int randomIndex = Random.Range(0, spawnedBots.Count + players.Count);
-        Debug.Log(spawnedBots.Count + players.Count);
         if (randomIndex >= spawnedBots.Count)
         {
             return players[randomIndex - spawnedBots.Count];

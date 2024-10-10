@@ -37,11 +37,7 @@ public class NetworkPlayerController : NetworkTransform
   public override void Spawned()
   {
     base.Spawned();
-
-    if (Object.HasInputAuthority)
-      transform.GetComponentInChildren<Camera>().gameObject.SetActive(true);
-    else
-      transform.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+    transform.GetComponentInChildren<Camera>().gameObject.SetActive(Object.HasInputAuthority);
   }
 
   public void Rotate(float verticalInput, float horizontalInput)
@@ -52,35 +48,31 @@ public class NetworkPlayerController : NetworkTransform
     if (currentEulerAngles.y > 180) currentEulerAngles.y -= 360;
     if (currentEulerAngles.z > 180) currentEulerAngles.z -= 360;
 
-    float newRotationX = currentEulerAngles.x - Time.deltaTime * turnSpeed * verticalInput;
-    newRotationX = Mathf.Clamp(newRotationX, -90f, 90f);
-
+    float newRotationX = Mathf.Clamp(currentEulerAngles.x - Time.deltaTime * turnSpeed * verticalInput, -90f, 90f);
     float newRotationY = currentEulerAngles.y - Time.deltaTime * turnSpeed * horizontalInput;
     float newRotationZ = currentEulerAngles.z + Time.deltaTime * turnSpeed * horizontalInput;
-    newRotationZ = Mathf.Clamp(newRotationZ, -90f, 90f);
 
-    Quaternion newRotation = Quaternion.Euler(newRotationX, newRotationY, newRotationZ);
-
+    Quaternion newRotation = Quaternion.Euler(newRotationX, newRotationY, Mathf.Clamp(newRotationZ, -90f, 90f));
     Rb.MoveRotation(newRotation);
   }
 
   public void RotateBack()
   {
-    Vector3 currentEulerAngles = Rb.rotation.eulerAngles;
-    float rotationZ = currentEulerAngles.z;
+    float rotationZ = Rb.rotation.eulerAngles.z;
+    if (rotationZ > 180f) rotationZ -= 360f;
     if (rotationZ == 0f)
-    {
       return;
-    }
 
-    if (rotationZ > 180) rotationZ -= 360;
-
-    if (rotationZ != 0f)
+    if (Mathf.Abs(rotationZ) <= turnBackSpeed)
     {
-      rotationZ = rotationZ > 0 ? rotationZ - turnBackSpeed : rotationZ + turnBackSpeed;
-      if (MathF.Abs(rotationZ) <= turnBackSpeed) rotationZ = 0;
-      Rb.MoveRotation(Quaternion.Euler(currentEulerAngles.x, currentEulerAngles.y, rotationZ));
+      rotationZ = 0f; // Gần 0 thì quay về 0
     }
+    else
+    {
+      rotationZ = rotationZ > 0f ? rotationZ - turnBackSpeed : rotationZ + turnBackSpeed;
+    }
+
+    Rb.MoveRotation(Quaternion.Euler(Rb.rotation.eulerAngles.x, Rb.rotation.eulerAngles.y, rotationZ));
   }
 
   public void Fire()
@@ -89,11 +81,10 @@ public class NetworkPlayerController : NetworkTransform
     {
       nextFireTime = Time.time + fireRate;
 
-      bulletPool.GetBulletFromPool(Runner, transform.position, transform.rotation);
-      bulletPool.GetBulletFromPool(Runner, transform.position, transform.rotation);
+      bulletPool.GetBulletFromPool(Runner, bulletSpawnPos.position, bulletSpawnPos.rotation);
+      bulletPool.GetBulletFromPool(Runner, bulletSpawnPos2.position, bulletSpawnPos2.rotation);
     }
   }
-
   private void OnCollisionEnter(Collision collision)
   {
     // Destroy(gameObject);

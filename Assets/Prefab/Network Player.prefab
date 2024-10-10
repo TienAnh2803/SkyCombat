@@ -199,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732820177364590789}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.0074176053, z: 0, w: 0.9999725}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -23, y: 29, z: 1552}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -214,7 +214,7 @@ Transform:
   - {fileID: 74218618256447378}
   - {fileID: 2710622160486110059}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -0.85, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4645311732482997931
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -390,8 +390,8 @@ MonoBehaviour:
   bulletPool: {fileID: 0}
   spin: 1000
   fireRate: 0.1
-  bulletSpawnPos: {fileID: 0}
-  bulletSpawnPos2: {fileID: 0}
+  bulletSpawnPos: {fileID: 8682155913759590168}
+  bulletSpawnPos2: {fileID: 9177807387542969733}
   _Velocity: {x: 0, y: 0, z: 0}
   _IsGrounded: 0
 --- !u!114 &9164104558762023734
@@ -5333,9 +5333,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1131657046069118834}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5, y: 2.5, z: 2.5}
-  m_LocalScale: {x: -0.86674523, y: 2, z: 0.90656}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7068602264969697200}
@@ -6645,9 +6645,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4755616832684567345}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5, y: 2.5, z: 2.5}
-  m_LocalScale: {x: -0.86674523, y: 2, z: 0.90656}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7068602264969697200}
