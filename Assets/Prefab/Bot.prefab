@@ -868,7 +868,9 @@ GameObject:
   - component: {fileID: 3281754371651643358}
   - component: {fileID: 7101183567848057511}
   - component: {fileID: 4180109900241351687}
-  - component: {fileID: 2031463957212142855}
+  - component: {fileID: 5390911597612188853}
+  - component: {fileID: -3266513519010427688}
+  - component: {fileID: -8709453336333519222}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Player
@@ -994,7 +996,47 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 19.097528, y: 4.7187066, z: 12.879532}
   m_Center: {x: 0, y: 2.3593533, z: -3.0109177}
---- !u!114 &2031463957212142855
+--- !u!114 &5390911597612188853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2198410582834359334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115d82f2cd77450479baf15ef42dfff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WordOffset: 0
+  WordCount: 0
+  _interpolationDataSource: 0
+--- !u!114 &-3266513519010427688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2198410582834359334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 2305
+  NetworkGuid:
+    RawGuidValue: 333e1a242b8944848b2bd6b3a6897e64
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 5390911597612188853}
+  - {fileID: -8709453336333519222}
+  SimulationBehaviours: []
+--- !u!114 &-8709453336333519222
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1006,8 +1048,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85e44587f5dbd549bd76b660e7b5837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 70
-  rotationSpeed: 3
+  WordOffset: 0
+  WordCount: 0
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 0}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  UseLegacySharedModeInterpolation: 0
+  TargetInterpolationDelay: 0.03
+  target: {fileID: 0}
+  speed: 100
+  rotationSpeed: 5
+  maxHp: 10
+  hp: 10
+  targetUpdateInterval: 3
+  hpUpdateInterval: 3
+  lastTargetUpdateTime: 0
+  lastHpUpdateTime: 0
 --- !u!1 &3428316864305636170
 GameObject:
   m_ObjectHideFlags: 0

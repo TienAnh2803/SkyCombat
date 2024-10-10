@@ -1,32 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Fusion;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public GameObject botPrefab;
     public int numberOfBots = 10;
     public Transform[] spawnPoints;
-    private List<GameObject> bots = new List<GameObject>();
+    private List<GameObject> spawnedBots = new List<GameObject>();
     private List<GameObject> players = new List<GameObject>();
 
-    void Start()
+    public override void Spawned()
     {
-        SpawnBots();
-        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        if (Object.HasStateAuthority)
+        {
+            SpawnBots();
+        }
+
+        StartCoroutine(SearchPlayer());
+    }
+
+    private IEnumerator SearchPlayer()
+    {
+        while (true)
+        {
+            players = GameObject.FindGameObjectsWithTag("Player").ToList();
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     // Hàm tạo bot
-    void SpawnBots()
+    private void SpawnBots()
     {
         for (int i = 0; i < numberOfBots; i++)
         {
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            GameObject bot = Instantiate(botPrefab, spawnPoint.position, spawnPoint.rotation, transform);
+            NetworkObject bot = Runner.Spawn(botPrefab, spawnPoint.position, spawnPoint.rotation, Object.InputAuthority);
+            GameObject botGameObject = bot.gameObject;
 
-            bots.Add(bot);
+            spawnedBots.Add(botGameObject);
         }
     }
 
@@ -37,19 +52,20 @@ public class GameManager : MonoBehaviour
 
     void ManageBots()
     {
-        bots.RemoveAll(bot => bot == null);
+        spawnedBots.RemoveAll(bot => bot == null);
     }
 
-    public GameObject GetRandomBot()
+    public GameObject GetRandomInGameObject()
     {
-        int randomIndex = Random.Range(0, bots.Count + players.Count);
-        if (randomIndex >= bots.Count)
+        int randomIndex = Random.Range(0, spawnedBots.Count + players.Count);
+        Debug.Log(spawnedBots.Count + players.Count);
+        if (randomIndex >= spawnedBots.Count)
         {
-            return players[randomIndex - bots.Count];
+            return players[randomIndex - spawnedBots.Count];
         }
         else
         {
-            return bots[randomIndex];
+            return spawnedBots[randomIndex];
         }
     }
 }

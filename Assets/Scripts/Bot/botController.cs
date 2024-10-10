@@ -1,57 +1,58 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Fusion;
 using UnityEngine;
 
-public class botController : MonoBehaviour
+[OrderBefore(typeof(NetworkTransform))]
+[DisallowMultipleComponent]
+[RequireComponent(typeof(Rigidbody))]
+public class BotController : NetworkTransform
 {
-    private Transform target;
+    [HideInInspector]
+    public Transform target;
     public float speed = 5f;
     public float rotationSpeed = 5f;
     private Rigidbody rb;
-    private int maxHp = 10;
-    private int hp = 10;
+    public int maxHp = 10;
+    public int hp = 10;
+    [HideInInspector]
+    public float targetUpdateInterval = 3f;
+    [HideInInspector]
+    public float hpUpdateInterval = 3f;
+    [HideInInspector]
+    public float lastTargetUpdateTime;
+    [HideInInspector]
+    public float lastHpUpdateTime;
+    private GameManager gameManager;
 
-    void Start()
+    public override void Spawned()
     {
-        StartCoroutine(AutoFindTarget());
-        StartCoroutine(AutoHp());
+        base.Spawned();
         rb = GetComponent<Rigidbody>();
-    }
-
-    void Update()
-    {
-        if (hp >= maxHp / 2) {
-            ChaseTarget();
-        } else {
-            FleeFromTarget();
-        } 
-    }
-
-    IEnumerator AutoFindTarget()
-    {
-        while (true)
+        if (Object.HasStateAuthority)
         {
-            FindTarget();
-            yield return new WaitForSeconds(3f);
+            StartCoroutine(WaitForNetworkReady());
+        }
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+    IEnumerator WaitForNetworkReady()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        lastTargetUpdateTime = Time.time;
+        lastHpUpdateTime = Time.time;
+    }
+
+    public void FindTarget()
+    {
+        if (gameManager != null) // Kiểm tra nếu GameManager đã được tìm thấy
+        {
+            target = gameManager.GetRandomInGameObject().transform;
         }
     }
 
-    IEnumerator AutoHp() {
-        while (true)
-        {
-            yield return new WaitForSeconds(3f);
-            hp = Random.Range(0, 10);
-        }
-    }
-
-
-    void FindTarget()
+    public void FleeFromTarget()
     {
-        target = FindObjectOfType<GameManager>().GetRandomBot().transform;
-    }
-
-    void FleeFromTarget() {
         Vector3 direction = (transform.position - target.position).normalized;
 
         Quaternion lookRotation = Quaternion.LookRotation(direction);
@@ -59,12 +60,13 @@ public class botController : MonoBehaviour
         rb.velocity = transform.forward * speed;
     }
 
-    void ChaseTarget()
+    public void ChaseTarget()
     {
         Vector3 direction = (target.position - transform.position).normalized;
 
         Quaternion lookRotation = Quaternion.LookRotation(direction);
         rb.MoveRotation(Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed));
-        rb.velocity = transform.forward * speed;
+
+        rb.AddForce(transform.forward * speed - rb.velocity, ForceMode.VelocityChange);
     }
 }

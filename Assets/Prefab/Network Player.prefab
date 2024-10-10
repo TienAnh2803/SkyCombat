@@ -384,12 +384,14 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  speed: 50
-  turnSpeed: 50
+  speed: 100
+  turnSpeed: 100
   turnBackSpeed: 0.5
   bulletPool: {fileID: 0}
   spin: 1000
   fireRate: 0.1
+  bulletSpawnPos: {fileID: 0}
+  bulletSpawnPos2: {fileID: 0}
   _Velocity: {x: 0, y: 0, z: 0}
   _IsGrounded: 0
 --- !u!114 &9164104558762023734
