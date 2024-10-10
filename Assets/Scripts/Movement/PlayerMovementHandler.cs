@@ -15,6 +15,11 @@ public class PlayerMovementHandler : NetworkBehaviour
         networkPlayerController.Rb.velocity = transform.forward * networkPlayerController.speed;
         if (GetInput(out NetworkInputData networkInputData))
         {
+            if (networkInputData.isShooting)
+            {
+                networkPlayerController.Fire();
+            }
+
             float verticalInput = networkInputData.movementInput.y;
             float horizontalInput = networkInputData.movementInput.x;
 
@@ -25,11 +30,6 @@ public class PlayerMovementHandler : NetworkBehaviour
             else
             {
                 networkPlayerController.RotateBack();
-            }
-
-            if (networkInputData.isShooting)
-            {
-                networkPlayerController.Fire();
             }
         }
     }
