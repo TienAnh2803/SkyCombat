@@ -384,7 +384,7 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  speed: 100
+  speed: 5
   turnSpeed: 100
   turnBackSpeed: 0.5
   bulletPool: {fileID: 0}

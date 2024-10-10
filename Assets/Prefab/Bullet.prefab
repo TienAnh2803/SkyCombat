@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3840763513495406369}
   - component: {fileID: -2263530345930123832}
   - component: {fileID: 1527376553550718165}
+  - component: {fileID: 2550495391621745173}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -123,9 +124,23 @@ MonoBehaviour:
   WordOffset: 0
   WordCount: 0
   _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 0}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  UseLegacySharedModeInterpolation: 0
+  TargetInterpolationDelay: 0.03
   speed: 500
   rb: {fileID: -2263530345930123832}
-  pool: {fileID: 0}
 --- !u!54 &-2263530345930123832
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -176,4 +191,20 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3840763513495406369}
+  - {fileID: 2550495391621745173}
   SimulationBehaviours: []
+--- !u!114 &2550495391621745173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7333499037450986946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591347cbcc8c1f74ca6659354740ce77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WordOffset: 0
+  WordCount: 0
+  _interpolationDataSource: 0

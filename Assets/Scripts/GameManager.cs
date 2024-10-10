@@ -17,6 +17,7 @@ public class GameManager : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             SpawnBots();
+            FindObjectOfType<BulletPool>().InitializePool(Runner);
         }
 
         StartCoroutine(SearchPlayer());

@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Fusion;
 
-public class Bullet : NetworkBehaviour
+[OrderBefore(typeof(NetworkTransform))]
+[DisallowMultipleComponent]
+[RequireComponent(typeof(Rigidbody))]
+public class Bullet : NetworkTransform
 {
     private BulletPool bulletPool;
     public float speed = 10f;
@@ -17,31 +19,12 @@ public class Bullet : NetworkBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        Invoke("Deactivate", 2f);
-    }
-
-
-    public override void FixedUpdateNetwork()
-    {
-        if (Object.HasStateAuthority)
-        {
-            rb.velocity = transform.forward * speed;
-        }
-    }
-
-    void Deactivate()
-    {
-        ReturnToPool();
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         ReturnToPool();
     }
 
-    private void ReturnToPool()
+    public void ReturnToPool()
     {
         if (bulletPool != null)
         {
@@ -53,8 +36,4 @@ public class Bullet : NetworkBehaviour
         }
     }
 
-    void OnDisable()
-    {
-        CancelInvoke();
-    }
 }
